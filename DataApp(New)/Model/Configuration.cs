@@ -14,9 +14,12 @@ namespace DataApp_New_.Model
             ConnectionString = connectionString;
             CardsXmlFilePath = xmlFilePath;
         }
+
+        //вот здесь че то надо думать. Значения теряются
         public Configuration(string PathToStartConfiguration) //При создании экземпляра принимать в параметр путь к настройкам соединения
         {
             this.PathToStartConfiguration = PathToStartConfiguration;
+            LoadFromFile(PathToStartConfiguration);
         }
 
         public static void FromUserToXml()
@@ -74,13 +77,15 @@ namespace DataApp_New_.Model
                 return null;
             }
         }
+
+        //На этом моменте значения потеряны
         public string GetConnection()
         {
-            return ConnectionString;//!!!
+            return ConnectionString;//null
         }
         public string GetPath()
         {
-            return CardsXmlFilePath;//!!!
+            return CardsXmlFilePath;//null
         }
     }
 }
