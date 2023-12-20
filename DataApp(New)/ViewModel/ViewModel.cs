@@ -126,6 +126,7 @@ namespace DataApp_New_.ViewModel
         } //Метод для загрузки данных из базы данных SQL Server в коллекцию Cards
         public void SaveChangesToDatabase()
         {
+            
             using (SqlConnection connection = new SqlConnection(config.GetConnection()))
             {
                 connection.Open();

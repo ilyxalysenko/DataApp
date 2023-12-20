@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StartConfiguration>
+  <Configuration ConnectionString="Data Source=DESKTOP-HOE58T4;Initial Catalog=usersdb;Integrated Security=True;User ID=admin;Password=admin;TrustServerCertificate=True;" FilePath="C:\Users\Илья\Downloads\Cards_20211005080948.xml" />
+</StartConfiguration>

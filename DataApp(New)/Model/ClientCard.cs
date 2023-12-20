@@ -213,6 +213,7 @@ public class ClientCard : INotifyPropertyChanged
             {
                 _apartment = value;
                 OnPropertyChanged(nameof(Apartment));
+
             }
         }
     }
@@ -234,6 +235,7 @@ public class ClientCard : INotifyPropertyChanged
 
     protected virtual void OnPropertyChanged(string propertyName)
     {
+        IsModified = true;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     

@@ -8,7 +8,7 @@ namespace DataApp_New_.Model
     {
         public string ConnectionString { get; set; }
         public string CardsXmlFilePath { get; set; }
-        public string PathToStartConfiguration { get; set; } = "StartConfiguration.xml";
+        public string PathToStartConfiguration { get; set; } = "StartConfiguration.xml"; //Найти где находимся. Найти папку ReadFrom... Найти StartConfiguration
         public Configuration(string connectionString, string xmlFilePath) //Указать вручную
         {
             ConnectionString = connectionString;
@@ -19,7 +19,26 @@ namespace DataApp_New_.Model
         public Configuration(string PathToStartConfiguration) //При создании экземпляра принимать в параметр путь к настройкам соединения
         {
             this.PathToStartConfiguration = PathToStartConfiguration;
-            LoadFromFile(PathToStartConfiguration);
+            try
+            {
+                XDocument xdoc = XDocument.Load(PathToStartConfiguration);
+                var sConf = xdoc.Element("StartConfiguration")?
+                    .Elements("Configuration")
+                    .FirstOrDefault();
+
+                if (sConf == null)
+                {
+                    Console.WriteLine("Ошибка: Не удалось получить конфигурацию.");
+                }
+
+                ConnectionString = sConf.Attribute("ConnectionString")?.Value;
+                CardsXmlFilePath = sConf.Attribute("FilePath")?.Value;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при загрузке конфигурации: {ex.Message}");
+            }
         }
 
         public static void FromUserToXml()
@@ -51,32 +70,33 @@ namespace DataApp_New_.Model
         }
 
         // 2 метода загрузки настроек из файла StartConfiguration.xml
-        public static Configuration LoadFromFile(string PathToStartConfiguration)
-        {
-            try
-            {
-                XDocument xdoc = XDocument.Load(PathToStartConfiguration);
-                var sConf = xdoc.Element("StartConfiguration")?
-                    .Elements("Configuration")
-                    .FirstOrDefault();
+        //public static Configuration LoadFromFile(string PathToStartConfiguration)
+        //{
+        //    try
+        //    {
+        //        XDocument xdoc = XDocument.Load(PathToStartConfiguration);
+        //        var sConf = xdoc.Element("StartConfiguration")?
+        //            .Elements("Configuration")
+        //            .FirstOrDefault();
 
-                if (sConf == null)
-                {
-                    Console.WriteLine("Ошибка: Не удалось получить конфигурацию.");
-                    return null;
-                }
+        //        if (sConf == null)
+        //        {
+        //            Console.WriteLine("Ошибка: Не удалось получить конфигурацию.");
+        //            return null;
+        //        }
 
-                string ConnectionString = sConf.Attribute("ConnectionString")?.Value;
-                string CardsXmlFilePath = sConf.Attribute("FilePath")?.Value;
-                Configuration config = new Configuration(ConnectionString, CardsXmlFilePath);
-                return config;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Ошибка при загрузке конфигурации: {ex.Message}");
-                return null;
-            }
-        }
+        //        string ConnectionString = sConf.Attribute("ConnectionString")?.Value;
+        //        string CardsXmlFilePath = sConf.Attribute("FilePath")?.Value;
+                
+        //        //Configuration config = new Configuration(ConnectionString, CardsXmlFilePath);
+        //        //return config;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Ошибка при загрузке конфигурации: {ex.Message}");
+        //        return null;
+        //    }
+        //}
 
         //На этом моменте значения потеряны
         public string GetConnection()
